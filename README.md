@@ -1,51 +1,62 @@
-🌌 Supernova Classification with Deep Learning
+# 🌌 Supernova Classification with Deep Learning  
 
-This project implements a Neural Network (NN) to classify supernovae into three categories using astrophysical data.
+This project implements a **Neural Network (NN)** to classify **supernovae** into **three categories** using astrophysical data.  
 
-🔬 Pipeline Overview
+---
 
-Data Preprocessing
+## 🔬 Pipeline Overview  
 
-Read raw .csv / .dat files with Pandas.
+- **Data Preprocessing**  
+  - Load raw `.csv` / `.dat` files with **Pandas**  
+  - Apply **One-Hot Encoding** and normalization with **scikit-learn**  
+  - Reshape input data into tensors for NN training  
 
-Clean and structure the dataset, applying normalization and One-Hot Encoding with scikit-learn.
+- **Model Architecture (TensorFlow/Keras)**  
+  - `Conv2D` layers for feature extraction  
+  - `BatchNormalization` to stabilize and speed up training  
+  - `MaxPooling` & `Dropout` to reduce overfitting  
+  - Fully connected `Dense` layers with `softmax` activation for **3-class classification**  
+  - `EarlyStopping` to avoid overfitting and restore best weights  
 
-Reshape the input data into tensors suitable for NN training.
+- **Training**  
+  - Framework: **TensorFlow / Keras**  
+  - Optimizer: **Adam**  
+  - Loss: **Categorical Crossentropy**  
+  - Metrics: **Accuracy** and **ROC-AUC** (via scikit-learn)  
 
-Model Architecture (TensorFlow/Keras)
+- **Evaluation**  
+  - Model is tested on unseen data (`X_test`, `y_test`)  
+  - Outputs include **accuracy**, **loss**, and **AUC score**  
 
-Convolutional layers (Conv2D) for feature extraction.
+---
 
-Batch Normalization to stabilize and speed up training.
+## 🛠️ Technologies Used  
 
-MaxPooling & Dropout to reduce overfitting.
+- [TensorFlow](https://www.tensorflow.org/) / [Keras](https://keras.io/) → Model building & training  
+- [scikit-learn](https://scikit-learn.org/) → Preprocessing & metrics  
+- [NumPy](https://numpy.org/) → Numerical operations  
+- [Pandas](https://pandas.pydata.org/) → Data handling  
 
-Dense layers with softmax activation for 3-class classification.
+---
 
-EarlyStopping callback to restore best weights and avoid overfitting.
+## 🚀 Usage  
 
-Training
+```python
+# Train model
+model.fit(X_train, y_train, 
+          epochs=50, 
+          validation_split=0.1, 
+          callbacks=[early_stop], 
+          batch_size=10)
 
-Framework: TensorFlow / Keras.
+# Evaluate
+test_loss, test_acc = model.evaluate(X_test, y_test)
+print(f"Test accuracy: {test_acc:.4f}")
 
-Optimizer: Adam.
+# Predict probabilities
+y_pred_probs = model.predict(X_test)
 
-Loss: Categorical Crossentropy.
-
-Evaluation metrics: Accuracy and ROC-AUC (using scikit-learn).
-
-Evaluation
-
-Achieves strong test accuracy and reliable AUC scores.
-
-Outputs predicted probabilities for each of the 3 classes.
-
-🛠️ Technologies Used
-
-TensorFlow / Keras → Model building & training
-
-scikit-learn → Preprocessing & evaluation metrics
-
-NumPy → Matrix operations
-
-Pandas → Data loading & manipulation
+# Compute AUC
+from sklearn.metrics import roc_auc_score
+auc = roc_auc_score(y_test, y_pred_probs)
+print("AUC Score:", auc)
